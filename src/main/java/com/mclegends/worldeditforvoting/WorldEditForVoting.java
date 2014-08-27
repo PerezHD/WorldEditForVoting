@@ -47,6 +47,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
       @Getter
       private PluginDescriptionFile pdf_file = null;
 
+      private String prefix = null;
       private List<String> give_worldedit_commands = new ArrayList<>();
       private ConcurrentHashMap<UUID, Long> player_storage = new ConcurrentHashMap<>();
 
@@ -121,6 +122,8 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
             saveDefaultConfig();
             reloadConfig();
 
+            prefix = ChatColor.translateAlternateColorCodes('&', getConfig().getString("prefix"));
+            
             give_worldedit_commands.clear();
             for (String worldedit_command : getConfig().getStringList("give_worldedit_commands")) {
                   give_worldedit_commands.add(worldedit_command);
@@ -146,10 +149,14 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
       }
 
       @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-      public void onPlayerJoin(PlayerJoinEvent event) {
-            if (hasPlayerVotedInLast24h(event.getPlayer().getUniqueId())) {
-                  giveWorldEdit(event.getPlayer().getName(), event.getPlayer().getUniqueId());
-            }
+      public void onPlayerJoin(final PlayerJoinEvent event) {
+            getServer().getScheduler().runTaskLater(this, new Runnable() {
+                  public void run() {
+                        if (hasPlayerVotedInLast24h(event.getPlayer().getUniqueId())) {
+                              giveWorldEdit(event.getPlayer().getName(), event.getPlayer().getUniqueId());
+                        }
+                  }
+            }, 20L);
       }
 
       private void giveWorldEdit(String player_name, UUID player_uuid) {
@@ -159,7 +166,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
                   getServer().dispatchCommand(Bukkit.getConsoleSender(), worldedit_command.replace("/", "").replace("{username}", player_name));
             }
             if (Bukkit.getPlayer(player_uuid) != null && Bukkit.getPlayer(player_uuid).isOnline()) {
-                  Bukkit.getPlayer(player_uuid).sendMessage(ChatColor.GOLD + "[WorldEdit] " + ChatColor.GREEN + "You now have access to worldedit. You will have access for " + ChatColor.UNDERLINE + getHoursOfWorldEditLeft(player_uuid) + ChatColor.RESET + ChatColor.GREEN + " more hours.");
+                  Bukkit.getPlayer(player_uuid).sendMessage(prefix + ChatColor.GREEN + "You now have access to worldedit. You will have access for " + ChatColor.UNDERLINE + getHoursOfWorldEditLeft(player_uuid) + ChatColor.RESET + ChatColor.GREEN + " more hours.");
             }
       }
 
@@ -169,7 +176,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
                         player_storage.remove(player_uuid);
 
                         if (Bukkit.getPlayer(player_uuid) != null && Bukkit.getPlayer(player_uuid).isOnline()) {
-                              Bukkit.getPlayer(player_uuid).sendMessage(ChatColor.GOLD + "[WorldEdit] " + ChatColor.RED + "You no longer have access to WorldEditm your 24h access has expired. Vote again with " + ChatColor.UNDERLINE + "/vote" + ChatColor.RESET + ChatColor.RED + " to regain access.");
+                              Bukkit.getPlayer(player_uuid).sendMessage(prefix + ChatColor.RED + "You no longer have access to WorldEdit, your 24hour access has expired. Vote again with " + ChatColor.UNDERLINE + "/vote" + ChatColor.RESET + ChatColor.RED + " to regain access.");
                         }
                   }
             }

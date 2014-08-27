@@ -2,6 +2,8 @@
 ##### WorldEditForVoting #####
 ##############################
 
+prefix: '&6MCLegends&dWorldEdit&8&l> '
+
 give_worldedit_commands:
     - '/pex user {username} timed add worldedit.region.set 21600'
     - '/pex user {username} timed add worldedit.clipboard.copy 21600'
