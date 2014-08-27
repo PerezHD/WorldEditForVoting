@@ -1,0 +1,24 @@
+##############################
+##### WorldEditForVoting #####
+##############################
+
+give_worldedit_commands:
+    - '/pex user {username} timed add worldedit.region.set 21600'
+    - '/pex user {username} timed add worldedit.clipboard.copy 21600'
+    - '/pex user {username} timed add worldedit.clipboard.paste 21600'
+    - '/pex user {username} timed add worldedit.clipboard.rotate 21600'
+    - '/pex user {username} timed add worldedit.clipboard.flip 21600'
+    - '/pex user {username} timed add worldedit.clipboard.cut 21600'
+    - '/pex user {username} timed add worldedit.wand 21600'
+    - '/pex user {username} timed add worldedit.generation.cylinder 21600'
+    - '/pex user {username} timed add worldedit.generation.sphere 21600'
+    - '/pex user {username} timed add worldedit.generation.pyramid 21600'
+    - '/pex user {username} timed add worldedit.history.redo 21600'
+    - '/pex user {username} timed add worldedit.history.undo 21600'
+    - '/pex user {username} timed add worldedit.region.walls 21600'
+    - '/pex user {username} timed add worldedit.region.replace 21600'
+    - '/pex user {username} timed add worldedit.selection.expand 21600'
+    - '/pex user {username} timed add worldedit.selection.pos 21600'
+    - '/pex user {username} timed add worldedit.selection.hpos 21600'
+    
+player_storage: []

@@ -1,0 +1,9 @@
+name: WorldEditForVoting
+authors: [harry5573]
+version: 1.0
+description: Simple plugin to give worldedit for voting.<
+website: www.mc-legends.com
+main: com.mclegends.worldeditforvoting.WorldEditForVoting
+commands:
+      giveworldedit:
+            description: Command to add 24 hours of worldedit to a user.
