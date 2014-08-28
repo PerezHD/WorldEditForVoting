@@ -64,7 +64,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
 
             //Checker task
             getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
-                  public void run() {
+                  public synchronized void run() {
                         for (UUID player_uuid : player_storage.keySet()) {
                               handleCheckWorldEditRemove(player_uuid);
                         }
@@ -97,7 +97,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
             sender.sendMessage(ChatColor.GREEN + "You have added 24 hours of worldedit to " + args[0]);
             //Do the UUID lookup async.
             getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
-                  public void run() {
+                  public synchronized void run() {
                         final UUID player_uuid = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
                         if (player_uuid == null) {
                               return;
