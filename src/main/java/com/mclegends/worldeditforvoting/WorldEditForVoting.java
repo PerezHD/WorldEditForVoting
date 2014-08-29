@@ -189,7 +189,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
                   return false;
             }
 
-            return getHoursOfWorldEditLeft(player_uuid) <= 0;
+            return getHoursOfWorldEditLeft(player_uuid) > 0;
       }
 
       private long getHoursOfWorldEditLeft(UUID player_uuid) {
