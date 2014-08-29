@@ -105,7 +105,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
 
                         getServer().getScheduler().runTask(plugin_instance, new Runnable() {
                               public void run() {
-                                    giveWorldEdit(args[0], player_uuid);
+                                    giveWorldEdit(args[0], player_uuid, true);
                               }
                         });
                   }
@@ -123,7 +123,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
             reloadConfig();
 
             prefix = ChatColor.translateAlternateColorCodes('&', getConfig().getString("prefix"));
-            
+
             give_worldedit_commands.clear();
             for (String worldedit_command : getConfig().getStringList("give_worldedit_commands")) {
                   give_worldedit_commands.add(worldedit_command);
@@ -153,14 +153,16 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
             getServer().getScheduler().runTaskLater(this, new Runnable() {
                   public void run() {
                         if (hasPlayerVotedInLast24h(event.getPlayer().getUniqueId())) {
-                              giveWorldEdit(event.getPlayer().getName(), event.getPlayer().getUniqueId());
+                              giveWorldEdit(event.getPlayer().getName(), event.getPlayer().getUniqueId(), false);
                         }
                   }
             }, 20L);
       }
 
-      private void giveWorldEdit(String player_name, UUID player_uuid) {
-            player_storage.put(player_uuid, System.currentTimeMillis());
+      private void giveWorldEdit(String player_name, UUID player_uuid, boolean add_to_map) {
+            if (add_to_map) {
+                  player_storage.put(player_uuid, System.currentTimeMillis());
+            }
 
             for (String worldedit_command : give_worldedit_commands) {
                   getServer().dispatchCommand(Bukkit.getConsoleSender(), worldedit_command.replace("/", "").replace("{username}", player_name));
@@ -187,7 +189,7 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
                   return false;
             }
 
-            return player_storage.get(player_uuid) > (System.currentTimeMillis() - 86400000);
+            return getHoursOfWorldEditLeft(player_uuid) <= 0;
       }
 
       private long getHoursOfWorldEditLeft(UUID player_uuid) {
