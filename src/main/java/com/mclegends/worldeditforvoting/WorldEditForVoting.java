@@ -193,10 +193,6 @@ public class WorldEditForVoting extends JavaPlugin implements Listener, CommandE
       }
 
       private long getHoursOfWorldEditLeft(UUID player_uuid) {
-            if (!hasPlayerVotedInLast24h(player_uuid)) {
-                  return 0;
-            }
-
             return TimeUnit.MILLISECONDS.toHours((player_storage.get(player_uuid) + 86400000) - System.currentTimeMillis());
       }
 }
